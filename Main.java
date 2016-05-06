@@ -1,8 +1,8 @@
 //package Main;
 
-import Controller.Controller;
-import View.View;
-import Model.Model;
+import view.View;
+import controller.Controller;
+import model.Model;
 
 public class Main
 {
@@ -10,7 +10,8 @@ public class Main
 	{
 		Controller controller = new Controller();
 		View view = new View();
-		Model model = new Model();
+		Model model = new Model();	
+		
 		System.out.println("Java sucks");	
 		return;
 	}
