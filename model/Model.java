@@ -52,9 +52,6 @@ public class Model
 				double addedMass = first.getSize() + second.getSize();
 				double subtractedMass = first.getSize() - second.getSize();
 				
-				double massRatio1 = first.getSize() / addedMass;
-				double massRatio2 = second.getSize() / addedMass;
-				
 				Point2D.Double collisionPoint = new Point2D.Double();
 				
 				collisionPoint.x = ((first.getPosition().x * second.getSize()) + (second.getPosition().x * first.getSize())) / addedMass;			 
