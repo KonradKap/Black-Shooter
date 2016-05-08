@@ -2,7 +2,8 @@ package model.entity;
 
 
 import java.awt.Color;
-import java.awt.geom.Point2D;
+
+import utill.Vector2D;
 
 import view.MyFrame;
 
@@ -10,47 +11,47 @@ public class Entity
 {
 	Entity()
 	{
-		position_ = new Point2D.Double(0, 0);
-		velocity_ = new Point2D.Double(0, 0);
+		position_ = new Vector2D(0, 0);
+		velocity_ = new Vector2D(0, 0);
 		size_ = 0;
 		allegiance_ = Allegiance.WHITE;
 	}
 	
-	Entity(Point2D.Double position, Point2D.Double velocity, int size, Allegiance allegiance)
+	Entity(Vector2D position, Vector2D velocity, int size, Allegiance allegiance)
 	{
-		position_ = new Point2D.Double(position.x, position.y);
-		velocity_ = new Point2D.Double(velocity.x, velocity.y);
+		position_ = new Vector2D(position.x, position.y);
+		velocity_ = new Vector2D(velocity.x, velocity.y);
 		size_ = size;
 		allegiance_ = allegiance;
 	}
 	
-	public Point2D.Double getPosition()
+	public Vector2D getPosition()
 	{
 		return position_;
 	}
 	
-	public void setPosition(Point2D.Double position)
+	public void setPosition(Vector2D position)
 	{
 		position_ = position;
 	}
 	
-	public void push(Point2D.Double offset)
+	public void push(Vector2D offset)
 	{
 		position_.x += offset.x;
 		position_.y += offset.y;
 	}
 	
-	public Point2D.Double getVelocity()
+	public Vector2D getVelocity()
 	{
 		return velocity_;
 	}
 	
-	public void setVelocity(Point2D.Double velocity)
+	public void setVelocity(Vector2D velocity)
 	{
 		velocity_ = velocity;
 	}
 	
-	public void accelerate(Point2D.Double acceleration)
+	public void accelerate(Vector2D acceleration)
 	{
 		velocity_.x += acceleration.x;
 		velocity_.y += acceleration.y;
@@ -64,6 +65,11 @@ public class Entity
 	public void setSize(int size)
 	{
 		size_ = size;
+	}
+	
+	public double getMass()
+	{
+		return size_*size_*Math.PI;
 	}
 	
 	public Allegiance getAllegiance()
@@ -91,7 +97,7 @@ public class Entity
 	
 	public void makeStep(double stepLength)
 	{
-		Point2D.Double distanceTravelled = new Point2D.Double(getVelocity().x, getVelocity().y);
+		Vector2D distanceTravelled = new Vector2D(getVelocity());
 		distanceTravelled.x *= stepLength;
 		distanceTravelled.y *= stepLength;	
 		push(distanceTravelled);
@@ -131,11 +137,11 @@ public class Entity
 	
 	static final int MAX_SIZE = 50;
 	static final int MIN_SIZE = 5;
-	static final double MAX_VELOCITY = 50;
+	static final double MAX_VELOCITY = 100;
 	
 	//TODO: make use of strategy pattern to implement different movement
-	private Point2D.Double position_;
-	private Point2D.Double velocity_;
+	private Vector2D position_;
+	private Vector2D velocity_;
 	private int size_;
 	private Allegiance allegiance_;
 }

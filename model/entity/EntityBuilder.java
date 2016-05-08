@@ -1,6 +1,6 @@
 package model.entity;
 
-import java.awt.geom.Point2D;
+import utill.Vector2D;
 
 //import model.entity.Entity;
 
@@ -11,13 +11,13 @@ public class EntityBuilder
 		return new Entity(position_, velocity_, size_, allegiance_);
 	}
 	
-	public EntityBuilder position(Point2D.Double position)
+	public EntityBuilder position(Vector2D position)
 	{
 		position_ = position;
 		return this;
 	}
 	
-	public EntityBuilder velocity(Point2D.Double velocity)
+	public EntityBuilder velocity(Vector2D velocity)
 	{
 		velocity_ = velocity;
 		return this;
@@ -35,8 +35,8 @@ public class EntityBuilder
 		return this;
 	}
 	
-	private Point2D.Double position_ = new Point2D.Double(0, 0);
-	private Point2D.Double velocity_ = new Point2D.Double(0, 0);
+	private Vector2D position_ = new Vector2D(0, 0);
+	private Vector2D velocity_ = new Vector2D(0, 0);
 	private int size_ = 0;
 	private Entity.Allegiance allegiance_ = Entity.Allegiance.WHITE;
 }

@@ -3,13 +3,14 @@ package view;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.geom.Point2D;
 import java.awt.image.BufferStrategy;
+import java.util.Iterator;
 
 //Theme song: https://www.youtube.com/watch?v=h0ffIJ7ZO4U
 
 import model.entity.Entity;
 import model.Model;
+import utill.Vector2D;
 
 public class View
 {
@@ -24,7 +25,7 @@ public class View
 	
 	private void drawEntity(Entity e, Graphics2D g)
 	{
-		Point2D.Double position = e.getPosition();
+		Vector2D position = new Vector2D(e.getPosition());
 		int size = e.getSize(); 
 	    g.drawOval((int)position.x-size, (int)position.y-size, size*2, size*2);
 	    g.setColor(e.getAllegiance().getColor());
@@ -35,9 +36,12 @@ public class View
 	{
 		Graphics2D g2 = (Graphics2D) strategy_.getDrawGraphics();
 		g2.setColor(Color.BLUE);
-		g2.fillRect(0,0,800,600);
-		for(Entity e : model_.getEntities())
+		g2.fillRect(0,0,MyFrame.WIDTH,MyFrame.HEIGHT);
+		for(Iterator<Entity> iterator = model_.getEntities().iterator(); iterator.hasNext();)
+		{
+			Entity e = iterator.next();
 			drawEntity(e, g2);
+		}
 		g2.dispose();
 		strategy_.show();
 	}		
