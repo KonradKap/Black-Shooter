@@ -9,50 +9,45 @@ import model.Model;
 
 public class Main
 {
-	public static void main(String[] args)
+	public static void main(String[] args) throws Exception
 	{
-		Controller controller = new Controller();
 		Model model = new Model();
-		View view = new View(model);
+		model.getEntityManager().startRandomGeneration();
 		
-		final int UPS = 600;
+		View view = new View(model);
+		Controller controller = new Controller(model);
+		view.getCanvas().addMouseListener(controller);
+		view.getCanvas().addKeyListener(controller);
+		
 		final int FPS = 60;
 		boolean running = true;
 		final int NANO = 1000000000;
 		
 		long initialTime = System.nanoTime();
-		final double timeU = (double)NANO / UPS;
 		final double timeF = (double)NANO / FPS;
-		double deltaU = 0;
 		double deltaF = 0;
 
 	    while (running) 
 	    {
 	        long currentTime = System.nanoTime();
-	        deltaU += (currentTime - initialTime) / timeU;
 	        deltaF += (currentTime - initialTime) / timeF;
 	        initialTime = currentTime;
 
-	        while (deltaU >= 1) 
-	        {
-	            //getInput();
-	            model.update(1.0/UPS);
-	            deltaU--;
-	        }
-
 	        while (deltaF >= 1) 
 	        {
-	            view.draw();
-	            Toolkit.getDefaultToolkit().sync();
+	            //controller.getInput();
+	            model.getEntityManager().update(1.0/FPS);
 	            deltaF--;
+	            view.draw();
+		        Toolkit.getDefaultToolkit().sync();
 	        }
      
 	        try
 	        {
-	            long gameTime = (initialTime - System.nanoTime() + (long)timeF) / 1000000;
+	            long gameTime = (System.nanoTime() - initialTime + (long)timeF) / 1000000;
 	            Thread.sleep(gameTime);
 	        }
-	        catch(Exception e)
+	        catch(InterruptedException e)
 	        {
 	        }
 	    }

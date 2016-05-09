@@ -12,7 +12,7 @@ public class MyFrame extends JFrame
 	
 	MyFrame()
 	{
-		super(Model.title);
+		super(Model.TITLE);
 		setSize(WIDTH, HEIGHT);
 		setLayout(new BorderLayout());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -21,6 +21,6 @@ public class MyFrame extends JFrame
 	}
 	
 	static final long serialVersionUID = 1L;
-	public static final int WIDTH  = 1600;
-	public static final int HEIGHT = 900;
+	public static final int WIDTH  = 800;
+	public static final int HEIGHT = 600;
 }

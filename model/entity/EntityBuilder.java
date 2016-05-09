@@ -8,7 +8,7 @@ public class EntityBuilder
 {	
 	public Entity build()
 	{
-		return new Entity(position_, velocity_, size_, allegiance_);
+		return new Entity(position_, size_, velocity_, allegiance_);
 	}
 	
 	public EntityBuilder position(Vector2D position)

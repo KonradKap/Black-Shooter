@@ -5,40 +5,32 @@ import java.awt.Color;
 
 import utill.Vector2D;
 
-import view.MyFrame;
-
 public class Entity
 {
 	Entity()
 	{
-		position_ = new Vector2D(0, 0);
+		body_ = new Circle();
 		velocity_ = new Vector2D(0, 0);
-		size_ = 0;
 		allegiance_ = Allegiance.WHITE;
 	}
 	
-	Entity(Vector2D position, Vector2D velocity, int size, Allegiance allegiance)
+	Entity(Circle body, Vector2D velocity, Allegiance allegiance)
 	{
-		position_ = new Vector2D(position.x, position.y);
-		velocity_ = new Vector2D(velocity.x, velocity.y);
-		size_ = size;
+		body_ = new Circle(body);
+		velocity_ = new Vector2D(velocity);
 		allegiance_ = allegiance;
 	}
 	
-	public Vector2D getPosition()
+	Entity(Vector2D position, int size, Vector2D velocity, Allegiance allegiance)
 	{
-		return position_;
+		body_ = new Circle(position, size);		
+		velocity_ = new Vector2D(velocity.x, velocity.y);
+		allegiance_ = allegiance;
 	}
 	
-	public void setPosition(Vector2D position)
+	public Circle getBody()
 	{
-		position_ = position;
-	}
-	
-	public void push(Vector2D offset)
-	{
-		position_.x += offset.x;
-		position_.y += offset.y;
+		return body_;
 	}
 	
 	public Vector2D getVelocity()
@@ -56,22 +48,7 @@ public class Entity
 		velocity_.x += acceleration.x;
 		velocity_.y += acceleration.y;
 	}
-	
-	public int getSize()
-	{
-		return size_;
-	}
-	
-	public void setSize(int size)
-	{
-		size_ = size;
-	}
-	
-	public double getMass()
-	{
-		return size_*size_*Math.PI;
-	}
-	
+
 	public Allegiance getAllegiance()
 	{
 		return allegiance_;
@@ -82,35 +59,14 @@ public class Entity
 		allegiance_ = allegiance;
 	}
 	
-	public boolean crosses(Entity other)
-	{
-		if(getPosition().x + getSize() < other.getPosition().x - other.getSize() ||
-		   getPosition().x - getSize() > other.getPosition().x + other.getSize())
-				return false;
-		
-		if(getPosition().y + getSize() < other.getPosition().y - other.getSize() ||
-		   getPosition().y - getSize() > other.getPosition().y + other.getSize())
-				return false;
-		
-		return getPosition().distance(other.getPosition()) < getSize() + other.getSize();
-	}
-	
 	public void makeStep(double stepLength)
 	{
 		Vector2D distanceTravelled = new Vector2D(getVelocity());
 		distanceTravelled.x *= stepLength;
 		distanceTravelled.y *= stepLength;	
-		push(distanceTravelled);
+		body_.push(distanceTravelled);
 	}
-	
-	public boolean isVisible()
-	{
-		if(getPosition().x + getSize() < 0 || getPosition().x - getSize() > MyFrame.WIDTH)
-			return false;
-		if(getPosition().y + getSize() < 0 || getPosition().y - getSize() > MyFrame.HEIGHT)
-			return false;
-		return true;
-	}
+
 	
 	public enum Allegiance
 	{
@@ -138,10 +94,10 @@ public class Entity
 	static final int MAX_SIZE = 50;
 	static final int MIN_SIZE = 5;
 	static final double MAX_VELOCITY = 100;
+	public static final int MAX_MASS = MAX_SIZE*MAX_SIZE;
 	
 	//TODO: make use of strategy pattern to implement different movement
-	private Vector2D position_;
 	private Vector2D velocity_;
-	private int size_;
+	private Circle body_;
 	private Allegiance allegiance_;
 }
