@@ -1,5 +1,7 @@
 *.class
 *.swp
+*.txt
+*.jar
 
 bin/
 doc/

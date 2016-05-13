@@ -1,6 +1,5 @@
 package view;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 
 import javax.swing.*;
@@ -14,9 +13,11 @@ public class MyFrame extends JFrame
 	{
 		super(Model.TITLE);
 		setSize(WIDTH, HEIGHT);
-		setLayout(new BorderLayout());
+		setBounds(0, 0, WIDTH, HEIGHT);
+		//setLayout(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
+		setResizable(false);
 		setBackground(Color.BLUE);
 	}
 	

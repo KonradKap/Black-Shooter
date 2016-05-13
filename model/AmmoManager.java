@@ -3,7 +3,7 @@ package model;
 import java.util.Timer;
 import java.util.TimerTask;
 
-class AmmoManager
+public class AmmoManager
 {
 	public AmmoManager()
 	{
@@ -23,6 +23,11 @@ class AmmoManager
 	public boolean canFire()
 	{
 		return currentCount > 0 && !reloading_;
+	}
+	
+	public boolean isReloading()
+	{
+		return reloading_;
 	}
 	
 	public void reload()
