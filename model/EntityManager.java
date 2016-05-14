@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 
 import java.util.Observable;
-
+import java.util.Random;
 
 import model.entity.Entity;
 import model.entity.EntityFactory;
@@ -21,17 +21,21 @@ public class EntityManager extends Observable
 	public EntityManager()
 	{
 		executor_.scheduleAtFixedRate(entityMaker_, 0, MAKE_REST_PERIOD, TimeUnit.MILLISECONDS);
+		executor_.scheduleAtFixedRate(entityInvoker_, 0, INVOKE_REST_PERIOD , TimeUnit.MILLISECONDS);
 		entityMaker_.pause();
+		entityInvoker_.pause();
 	}
 	
-	public void startRandomGeneration()
+	public void start()
 	{
 		entityMaker_.resume();
+		entityInvoker_.resume();
 	}
 	
-	public void stopRandomGeneration()
+	public void stop()
 	{
 		entityMaker_.pause();
+		entityInvoker_.pause();
 	}
 	
 	public CopyOnWriteArrayList<Entity> getEntities()
@@ -140,11 +144,44 @@ public class EntityManager extends Observable
 	        running_ = true;
 	    }
 	    
-	    private boolean running_;
+	    private boolean running_ = true;
 	}
 	
+	private class Invoker implements Runnable
+	{
+		public void run()
+		{
+			if (running_)
+			{
+				//try
+				//{
+				entities_.get(generator_.nextInt(entities_.size())).invokeAction();
+				//}
+				//catch(Exception e)
+				//{
+				//	e.printStackTrace();
+				//}
+			}
+		}
+		
+		public void pause()
+		{
+			running_ = false;
+		}
+		
+		public void resume()
+		{
+			running_ = true;
+		}
+		
+		private boolean running_ = true;
+		private Random generator_ = new Random();
+	}
+	
+	private final Invoker entityInvoker_ = new Invoker();
 	private final Maker entityMaker_ = new Maker();
-	private final ScheduledExecutorService executor_ = Executors.newScheduledThreadPool(1);
+	private final ScheduledExecutorService executor_ = Executors.newScheduledThreadPool(2);
 	private static final int MAKE_REST_PERIOD = 75;
+	private static final int INVOKE_REST_PERIOD = 150;
 	private CopyOnWriteArrayList<Entity> entities_ = new CopyOnWriteArrayList<Entity>();
 }

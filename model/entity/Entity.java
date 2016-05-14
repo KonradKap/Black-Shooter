@@ -9,23 +9,28 @@ public class Entity
 {
 	Entity()
 	{
-		body_ = new Circle();
-		velocity_ = new Vector2D(0, 0);
-		allegiance_ = Allegiance.WHITE;
+		this(new Circle(), new Vector2D(), Allegiance.WHITE, new NullAction());
+		//body_ = new Circle();
+		//velocity_ = new Vector2D(0, 0);
+		//allegiance_ = Allegiance.WHITE;
+		
 	}
 	
-	Entity(Circle body, Vector2D velocity, Allegiance allegiance)
+	Entity(Circle body, Vector2D velocity, Allegiance allegiance, EntityAction action)
 	{
 		body_ = new Circle(body);
 		velocity_ = new Vector2D(velocity);
 		allegiance_ = allegiance;
+		action_ = action;
 	}
 	
-	Entity(Vector2D position, int size, Vector2D velocity, Allegiance allegiance)
+	Entity(Vector2D position, int size, Vector2D velocity, Allegiance allegiance, EntityAction action)
 	{
-		body_ = new Circle(position, size);		
-		velocity_ = new Vector2D(velocity.x, velocity.y);
-		allegiance_ = allegiance;
+		this(new Circle(position, size), velocity, allegiance, action);
+		//body_ = new Circle(position, size);		
+		//velocity_ = new Vector2D(velocity.x, velocity.y);
+		//allegiance_ = allegiance;
+		//action_ = action;
 	}
 	
 	public Circle getBody()
@@ -59,6 +64,11 @@ public class Entity
 		allegiance_ = allegiance;
 	}
 	
+	public void invokeAction()
+	{
+		action_.doAction(this);
+	}
+	
 	public void makeStep(double stepLength)
 	{
 		Vector2D distanceTravelled = new Vector2D(getVelocity());
@@ -66,7 +76,6 @@ public class Entity
 		distanceTravelled.y *= stepLength;	
 		body_.push(distanceTravelled);
 	}
-
 	
 	public enum Allegiance
 	{
@@ -97,6 +106,8 @@ public class Entity
 	public static final int MAX_MASS = MAX_SIZE*MAX_SIZE;
 	
 	//TODO: make use of strategy pattern to implement different movement
+	
+	private EntityAction action_;
 	private Vector2D velocity_;
 	private Circle body_;
 	private Allegiance allegiance_;

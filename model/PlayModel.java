@@ -13,14 +13,14 @@ public class PlayModel extends Observable implements Model
 	
 	public void start()
 	{
-		getEntityManager().startRandomGeneration();
+		getEntityManager().start();
 
 		new Timer().schedule(timer_, 0, SECOND);	
 	}
 	
 	public void pause()
 	{
-		getEntityManager().stopRandomGeneration();
+		getEntityManager().stop();
 	}
 	public PlayModel()
 	{

@@ -3,6 +3,7 @@
 *.txt
 *.jar
 
+META-INF/
 bin/
 doc/
 .metadata/
