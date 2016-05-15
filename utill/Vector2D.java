@@ -73,8 +73,15 @@ public class Vector2D
 		return x*other.x + y*other.y;
 	}
 	
-	public boolean equals(Vector2D other)
+	public boolean equals(Object other)
 	{
-		return x == other.x && y == other.y;
+	    if (other == null) 
+	    	return false;
+	    if (other == this) 
+	    	return true;
+	    if (!(other instanceof Vector2D))
+	    	return false;
+	    Vector2D otherVector = (Vector2D)other;
+		return x == otherVector.x && y == otherVector.y;
 	}
 }

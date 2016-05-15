@@ -5,6 +5,7 @@ import java.awt.Color;
 import javax.swing.*;
 
 import model.Model;
+import utill.Vector2D;
 
 public class MyFrame extends JFrame
 {
@@ -20,6 +21,17 @@ public class MyFrame extends JFrame
 		setResizable(false);
 		setBackground(Color.BLUE);
 	}
+	
+	public static Vector2D windowBegin()
+	{
+		return new Vector2D(0, 0);
+	}
+	
+	public static Vector2D windowSize()
+	{
+		return new Vector2D(800, 600);
+	}
+	
 	
 	static final long serialVersionUID = 1L;
 	public static final int WIDTH  = 800;

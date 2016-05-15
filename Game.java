@@ -11,8 +11,6 @@ import java.util.Observable;
 import java.util.Observer;
 
 import controller.PlayController;
-import controller.Controller;
-import controller.MenuController;
 import model.MenuModel;
 import model.Model;
 import model.PlayModel;
@@ -86,11 +84,9 @@ public class Game implements ActionListener, Observer
 
 	        while (deltaF >= 1) 
 	        {
-	            //controller.getInput();
 	            game.getModel().update(1.0/FPS);
 	            deltaF--;
 	            game.getView().draw();
-	            //game.getView().draw();
 		        Toolkit.getDefaultToolkit().sync();
 	        }
      
@@ -103,33 +99,34 @@ public class Game implements ActionListener, Observer
 	        {
 	        }
 	    }
-	    game.getView().getFrame().dispatchEvent(new WindowEvent(game.getView().getFrame(), WindowEvent.WINDOW_CLOSING));
+	    View.getFrame().dispatchEvent(new WindowEvent(View.getFrame(), WindowEvent.WINDOW_CLOSING));
 	}
 	
 	private void switchState(GameState newState) throws IOException
 	{
 		switch(newState)
 		{
-		case Menu:		
-			MenuModel newMenuModel = new MenuModel();
-			model_ = newMenuModel;
+		case Menu:	
+			MenuModel newMenuModel = new MenuModel();		
+			//MenuController newMenuController = new MenuController(newMenuModel);
 			MenuView newMenuView = new MenuView(newMenuModel);
-			controller_ = new MenuController(newMenuModel);
-			//TODO: REGISTER newView observers
+			
 			newMenuView.getPlayButton().addActionListener(this);
 			newMenuView.getQuitButton().addActionListener(this);
 			if(maxPoints_.intValue() > 0)
 				newMenuModel.showPoints(maxPoints_);
-			view_ = newMenuView;
 			
+			model_ = newMenuModel;
+			view_ = newMenuView;
 			break;
 		case Play:
 			PlayModel newPlayModel = new PlayModel();
+			PlayController newPlayController = new PlayController(newPlayModel);
+			PlayView newPlayView = new PlayView(newPlayModel, newPlayController);
+			
 			newPlayModel.addObserver(this);
-			model_ = newPlayModel;
-			controller_ = new PlayController(newPlayModel);
-			PlayView newPlayView = new PlayView(newPlayModel);
-			View.getFrame().addMouseListener(controller_);
+			
+			model_ = newPlayModel;	
 			view_ = newPlayView; 
 			break;
 		}
@@ -153,15 +150,10 @@ public class Game implements ActionListener, Observer
 		return view_;
 	}
 	
-	public Controller getController()
-	{
-		return controller_;
-	}
 	
 	private Integer maxPoints_ = 0;
 	private boolean running_ = true;
 	private Model model_; 
-	private Controller controller_; 
 	private View view_;
 	
 }

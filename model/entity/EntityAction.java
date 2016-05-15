@@ -6,14 +6,15 @@ import java.util.Map;
 import model.entity.Entity;
 import utill.Vector2D;
 
-interface EntityAction
+public interface EntityAction
 {
 	abstract public void doAction(Entity target);
 	enum ActionType
 	{
 		Null(0),
 		SpeedUp(1),
-		Disappear(2);
+		Disappear(2),
+		ChangeAllegiance(3);
 		
 		int value_;
 		private static Map<Integer, ActionType> map = new HashMap<Integer, ActionType>();
@@ -68,5 +69,16 @@ class DisappearAction implements EntityAction
 		target.getBody().setPosition(new Vector2D(0, 0).subtract(
 								     new Vector2D(target.getBody().getRadius(), target.getBody().getRadius())));
 		target.getBody().setSize(0);
+	}
+}
+
+class ChangeAllegianceAction implements EntityAction
+{
+	public void doAction(Entity target)
+	{
+		if(target.getAllegiance() == Entity.Allegiance.BLACK)
+			target.setAllegiance(Entity.Allegiance.WHITE);
+		else
+			target.setAllegiance(Entity.Allegiance.BLACK);
 	}
 }

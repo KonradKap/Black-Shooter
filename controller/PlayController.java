@@ -1,8 +1,12 @@
 package controller;
 
-import java.awt.event.MouseEvent;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import model.AmmoManager;
 import model.PlayModel;
+import model.entity.Entity;
+import utill.Vector2D;
 
 public class PlayController implements Controller
 {
@@ -11,37 +15,47 @@ public class PlayController implements Controller
 		target_ = target;
 	}
 	
-	public void mousePressed(MouseEvent event)
+	public void fire(int x, int y)
 	{
-		int buttonCode = event.getButton();
-		switch(buttonCode)
+		if(target_.getAmmoManager().canFire())
 		{
-		case MouseEvent.BUTTON1:
-			target_.fire(event.getX(), event.getY());
-			break;
-		case MouseEvent.BUTTON3:
-			target_.reload();
-			break;
-		default:
-			return;
-		}			
+			shootAt(x, y);
+			target_.getAmmoManager().decrementCount();
+		}
 	}
 	
-	public void mouseExited(MouseEvent event)
-	{		
-	}
-	
-	public void mouseClicked(MouseEvent event)
-	{	
-	}
-	
-	public void mouseReleased(MouseEvent event)
-	{	
-	}
-	
-	public void mouseEntered(MouseEvent event)
+	private void shootAt(int x, int y)
 	{
+		Vector2D target = new Vector2D(x, y);
+		for(Entity e : target_.getEntityManager().getEntities())
+			if(e.getBody().contains(target))
+			{
+				target_.getPointCounter().update(e);
+				target_.getEntityManager().getEntities().remove(e);
+			}
+	}
+	
+	public void reload()
+	{
+		if(target_.getAmmoManager().getCount() == AmmoManager.MAX_COUNT ||
+		   target_.getAmmoManager().isReloading())
+			return;
+		target_.getAmmoManager().startReloading();
+		new Timer().schedule
+		( 
+			new TimerTask() 
+			{
+				public void run() 
+				{
+					target_.getAmmoManager().stopReloading();
+					target_.getAmmoManager().setCount(AmmoManager.MAX_COUNT);
+		        }
+		    }, 
+			RELOAD_MILI
+		);
 	}
 	
 	private PlayModel target_;
+	
+	private static final int RELOAD_MILI = 1500;
 }

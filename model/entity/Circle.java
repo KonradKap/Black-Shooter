@@ -3,7 +3,6 @@ package model.entity;
 import java.security.InvalidParameterException;
 
 import utill.Vector2D;
-import view.MyFrame;
 
 public class Circle
 {
@@ -50,6 +49,8 @@ public class Circle
 	
 	public void setSize(int radius)
 	{
+		if(radius < 0)
+			throw new InvalidParameterException("Radius cannot be negative");
 		radius_ = radius;
 	}
 	
@@ -71,23 +72,26 @@ public class Circle
 		return getPosition().distance(other.getPosition()) < getRadius() + other.getRadius();
 	}
 	
-	public boolean isVisible()
+	public boolean isVisibleInside(Vector2D position, Vector2D size)
 	{
-		if(getPosition().x + getRadius() < 0 || getPosition().x - getRadius() > MyFrame.WIDTH)
+		if(getPosition().x + getRadius() < position.x || getPosition().x - getRadius() > position.x+size.x)
 			return false;
-		if(getPosition().y + getRadius() < 0 || getPosition().y - getRadius() > MyFrame.HEIGHT)
+		if(getPosition().y + getRadius() < position.y || getPosition().y - getRadius() > position.y+size.y)
 			return false;
 		return true;
 	}
 	
 	public boolean contains(Vector2D point)
 	{
+		return this.crosses(new Circle(point, 0));
+		/*
 		if(point.x < getPosition().x - getRadius() || point.x > getPosition().x + getRadius())
 			return false;
 		if(point.y < getPosition().y - getRadius() || point.y > getPosition().y + getRadius())
 			return false;
 		
 		return getPosition().distance(point) < getRadius();
+		*/
 	}
 	
 	private Vector2D position_;

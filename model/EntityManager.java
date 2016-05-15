@@ -6,24 +6,22 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-
-import java.util.Observable;
 import java.util.Random;
 
 import model.entity.Entity;
 import model.entity.EntityFactory;
+import model.entity.EntityActionFactory;
 import utill.Vector2D;
+import view.MyFrame;
 
 
 //TODO: Ragdolls maybe?
-public class EntityManager extends Observable
+public class EntityManager
 {
 	public EntityManager()
 	{
 		executor_.scheduleAtFixedRate(entityMaker_, 0, MAKE_REST_PERIOD, TimeUnit.MILLISECONDS);
 		executor_.scheduleAtFixedRate(entityInvoker_, 0, INVOKE_REST_PERIOD , TimeUnit.MILLISECONDS);
-		entityMaker_.pause();
-		entityInvoker_.pause();
 	}
 	
 	public void start()
@@ -48,23 +46,13 @@ public class EntityManager extends Observable
 		addEntity(EntityFactory.getInstance().generateRandom());
 	}
 	
-	public void addEntity(Entity newEntity)
+	public boolean addEntity(Entity newEntity)
 	{
 		for(Entity e : entities_)
 			if(newEntity.getBody().crosses(e.getBody()))
-				return;
+				return false;
 		entities_.add(newEntity);
-	}
-	
-	public void fire(int x, int y)
-	{
-		for(Entity e : entities_)
-			if(e.getBody().contains(new Vector2D(x, y)))
-			{
-				setChanged();
-				notifyObservers(e);
-				entities_.remove(e);
-			}
+		return true;
 	}
 	
 	public void update(double elapsedSeconds)
@@ -79,7 +67,7 @@ public class EntityManager extends Observable
 		for(Entity e : entities_)
 		{
 			e.makeStep(elapsedSeconds);
-			if(!e.getBody().isVisible())
+			if(!e.getBody().isVisibleInside(MyFrame.windowBegin(), MyFrame.windowSize()))
 				invisible.add(e);
 		}
 		entities_.removeAll(invisible);
@@ -126,15 +114,17 @@ public class EntityManager extends Observable
 		second.accelerate(nDirectionVector.multiply(massRatioTwo*vectorRatioTwo).negate());	
 	}
 	
-	private class Maker implements Runnable
+	private abstract class PausableRunnable implements Runnable
 	{
-	    public void run() 
-	    {
-	    	if (running_)
-	    		addEntity();
-	    }
-	    
-	    public void pause()
+		protected abstract void doAction();
+		
+		public void run()
+		{
+			if(running_)
+				doAction();
+		}
+		
+		public void pause()
 	    {
 	        running_ = false;
 	    }
@@ -144,37 +134,24 @@ public class EntityManager extends Observable
 	        running_ = true;
 	    }
 	    
-	    private boolean running_ = true;
+	    private boolean running_ = false;
 	}
 	
-	private class Invoker implements Runnable
+	private class Maker extends PausableRunnable
 	{
-		public void run()
+	    protected void doAction() 
+	    {
+	    	addEntity();
+	    }	    
+	}
+	
+	private class Invoker extends PausableRunnable
+	{
+		protected void doAction()
 		{
-			if (running_)
-			{
-				//try
-				//{
-				entities_.get(generator_.nextInt(entities_.size())).invokeAction();
-				//}
-				//catch(Exception e)
-				//{
-				//	e.printStackTrace();
-				//}
-			}
+			EntityActionFactory.getInstance().generateRandom().doAction(
+					entities_.get(generator_.nextInt(entities_.size())));
 		}
-		
-		public void pause()
-		{
-			running_ = false;
-		}
-		
-		public void resume()
-		{
-			running_ = true;
-		}
-		
-		private boolean running_ = true;
 		private Random generator_ = new Random();
 	}
 	

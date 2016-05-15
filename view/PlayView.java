@@ -3,20 +3,25 @@ package view;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JPanel;
 
+import controller.PlayController;
 import model.entity.Entity;
 import model.PlayModel;
 import utill.Vector2D;
 
 public class PlayView extends View
 {
-	public PlayView(PlayModel model)
+	public PlayView(PlayModel model, PlayController controller)
 	{
 		model_ = model;
+		controller_ = controller;
 		mainFrame_.getContentPane().removeAll();
 		mainFrame_.add(new PlayPanel());
+		mainFrame_.addMouseListener(createMouseListener());
 	}
 	
 	public void draw()
@@ -66,13 +71,46 @@ public class PlayView extends View
 
 		static final long serialVersionUID = 1L;
 	}
-
-	//public Canvas getCanvas()
-	//{
-	//	return canvas_;
-	//}
+	
+	private MouseListener createMouseListener()
+	{
+		return new MouseListener()
+			{
+				public void mousePressed(MouseEvent event)
+				{
+					switch(event.getButton())
+					{
+					case MouseEvent.BUTTON1:
+						controller_.fire(event.getX(), event.getY());
+						break;
+					case MouseEvent.BUTTON3:
+						controller_.reload();
+						break;
+					default:
+						return;
+					}			
+				}
+				
+				public void mouseExited(MouseEvent event)
+				{		
+				}
+				
+				public void mouseClicked(MouseEvent event)
+				{	
+				}
+				
+				public void mouseReleased(MouseEvent event)
+				{	
+				}
+				
+				public void mouseEntered(MouseEvent event)
+				{
+				}
+			};
+	}
 	
 	private PlayModel model_;
+	private PlayController controller_;
 
 	private static final int POINT_POS_X = 10;
 	private static final int POINT_POS_Y = FONT_SIZE + 10;

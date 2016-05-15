@@ -19,7 +19,7 @@ public class EntityFactory
 					   .velocity(new Vector2D(generator_.nextDouble()*Entity.MAX_VELOCITY*2.0d-Entity.MAX_VELOCITY, generator_.nextDouble()*Entity.MAX_VELOCITY*2.0d-Entity.MAX_VELOCITY))
 				       .size(generator_.nextInt(Entity.MAX_SIZE-Entity.MIN_SIZE) + Entity.MIN_SIZE)
 				       .allegiance(Entity.Allegiance.values()[generator_.nextInt(Entity.Allegiance.getCount())])
-				       .action(EntityActionFactory.getInstance().generateRandom())
+				       //.action(EntityActionFactory.getInstance().generateRandom())
 					   .build();
 	}
 	

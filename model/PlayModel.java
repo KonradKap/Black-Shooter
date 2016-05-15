@@ -24,16 +24,6 @@ public class PlayModel extends Observable implements Model
 	}
 	public PlayModel()
 	{
-		getEntityManager().addObserver(pointCounter_);
-	}
-	
-	public void fire(int x, int y)
-	{
-		if(getAmmoManager().canFire())
-		{
-			getAmmoManager().fire();
-			getEntityManager().fire(x,  y);
-		}
 	}
 	
 	public int getRemainingTime()
@@ -41,25 +31,24 @@ public class PlayModel extends Observable implements Model
 		return GAME_TIME - timer_.getTime();
 	}
 	
-	public void reload()
-	{
-		getAmmoManager().reload();
-	}
-	
-	
 	public EntityManager getEntityManager()
 	{
 		return entityManager_;
 	}
 	
-	public int getPointCount()
-	{
-		return pointCounter_.getCount();
-	}
-	
 	public AmmoManager getAmmoManager()
 	{
 		return ammoManager_;
+	}
+	
+	public PointCounter getPointCounter()
+	{
+		return pointCounter_;
+	}
+	
+	public int getPointCount()
+	{
+		return pointCounter_.getCount();
 	}
 	
 	private class GameEndTimer extends TimerTask
@@ -85,7 +74,7 @@ public class PlayModel extends Observable implements Model
 	
 	private static final int GAME_TIME = 120;
 	private static final int SECOND = 1000;
-	private PointCounter pointCounter_ = new PointCounter();
 	private AmmoManager ammoManager_ = new AmmoManager();
+	private PointCounter pointCounter_ = new PointCounter();
 	private EntityManager entityManager_ = new EntityManager();
 }

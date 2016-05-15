@@ -4,7 +4,7 @@ import java.util.Random;
 
 import utill.Vector2D;
 
-class EntityActionFactory
+public class EntityActionFactory
 {
 	public static EntityActionFactory getInstance()
 	{
@@ -27,6 +27,8 @@ class EntityActionFactory
 			return new SpeedUpAction(new Vector2D(generator_.nextInt((int)Entity.MAX_VELOCITY), generator_.nextInt((int)Entity.MAX_VELOCITY)));
 		case Disappear:
 			return new DisappearAction();
+		case ChangeAllegiance:
+			return new ChangeAllegianceAction();
 		default:
 			throw new EnumConstantNotPresentException(action.getClass(), action.toString());
 		}

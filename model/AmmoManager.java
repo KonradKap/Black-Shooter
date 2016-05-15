@@ -1,8 +1,5 @@
 package model;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 public class AmmoManager
 {
 	public AmmoManager()
@@ -11,18 +8,22 @@ public class AmmoManager
 	
 	public int getCount()
 	{
-		return currentCount;
+		return currentCount_;
 	}
 	
-	public void fire()
+	public void setCount(int newCount)
 	{
-		if(canFire())
-			currentCount--;
+		currentCount_ = newCount;
+	}
+	
+	public void decrementCount()
+	{
+		setCount(getCount() - 1);
 	}
 	
 	public boolean canFire()
 	{
-		return currentCount > 0 && !reloading_;
+		return currentCount_ > 0 && !reloading_;
 	}
 	
 	public boolean isReloading()
@@ -30,28 +31,17 @@ public class AmmoManager
 		return reloading_;
 	}
 	
-	public void reload()
+	public void startReloading()
 	{
-		if(currentCount == MAX_COUNT || reloading_)
-			return;
 		reloading_ = true;
-		new Timer().schedule
-		( 
-			new TimerTask() 
-			{
-				public void run() 
-				{
-					reloading_ = false;
-					currentCount = MAX_COUNT;
-		        }
-		    }, 
-			RELOAD_MILI
-		);
 	}
 	
+	public void stopReloading()
+	{
+		reloading_ = false;
+	}
 	
-	private int currentCount = MAX_COUNT;
+	private int currentCount_ = MAX_COUNT;
 	private boolean reloading_ = false;
-	private static final int RELOAD_MILI = 2000;
-	private final static int MAX_COUNT = 5;
+	public final static int MAX_COUNT = 5;
 }
