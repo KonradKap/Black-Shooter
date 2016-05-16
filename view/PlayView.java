@@ -63,10 +63,10 @@ public class PlayView extends View
 		private void drawEntity(Entity e, Graphics2D g)
 		{
 			Vector2D position = new Vector2D(e.getBody().getPosition());
-			int size = e.getBody().getRadius(); 
-		    g.drawOval((int)position.x-size, (int)position.y-size, size*2, size*2);
+			double size = e.getBody().getRadius(); 
+		    g.drawOval((int)(position.x-size), (int)(position.y-size), (int)(size*2), (int)(size*2));
 		    g.setColor(e.getAllegiance().getColor());
-		    g.fillOval((int)position.x-size-1, (int)position.y-size-1, size*2+2, size*2+2);
+		    g.fillOval((int)(position.x-size-1), (int)(position.y-size-1), (int)(size*2+2), (int)(size*2+2));
 		}
 
 		static final long serialVersionUID = 1L;

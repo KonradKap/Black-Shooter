@@ -12,7 +12,7 @@ public class Circle
 		radius_ = 0;
 	}
 	
-	public Circle(Vector2D position, int radius)
+	public Circle(Vector2D position, double radius)
 	{
 		position_ = new Vector2D(position);
 		if(radius < 0)
@@ -42,12 +42,12 @@ public class Circle
 		position_.y += offset.y;
 	}
 	
-	public int getRadius()
+	public double getRadius()
 	{
 		return radius_;
 	}
 	
-	public void setSize(int radius)
+	public void setSize(double radius)
 	{
 		if(radius < 0)
 			throw new InvalidParameterException("Radius cannot be negative");
@@ -61,12 +61,12 @@ public class Circle
 	
 	public boolean crosses(Circle other)
 	{
-		if(getPosition().x + getRadius() < other.getPosition().x - other.getRadius() ||
-		   getPosition().x - getRadius() > other.getPosition().x + other.getRadius())
+		if(getPosition().x + getRadius() <= other.getPosition().x - other.getRadius() ||
+		   getPosition().x - getRadius() >= other.getPosition().x + other.getRadius())
 				return false;
 		
-		if(getPosition().y + getRadius() < other.getPosition().y - other.getRadius() ||
-		   getPosition().y - getRadius() > other.getPosition().y + other.getRadius())
+		if(getPosition().y + getRadius() <= other.getPosition().y - other.getRadius() ||
+		   getPosition().y - getRadius() >= other.getPosition().y + other.getRadius())
 				return false;
 		
 		return getPosition().distance(other.getPosition()) < getRadius() + other.getRadius();
@@ -74,9 +74,9 @@ public class Circle
 	
 	public boolean isVisibleInside(Vector2D position, Vector2D size)
 	{
-		if(getPosition().x + getRadius() < position.x || getPosition().x - getRadius() > position.x+size.x)
+		if(getPosition().x + getRadius() <= position.x || getPosition().x - getRadius() >= position.x+size.x)
 			return false;
-		if(getPosition().y + getRadius() < position.y || getPosition().y - getRadius() > position.y+size.y)
+		if(getPosition().y + getRadius() <= position.y || getPosition().y - getRadius() >= position.y+size.y)
 			return false;
 		return true;
 	}
@@ -84,16 +84,21 @@ public class Circle
 	public boolean contains(Vector2D point)
 	{
 		return this.crosses(new Circle(point, 0));
-		/*
-		if(point.x < getPosition().x - getRadius() || point.x > getPosition().x + getRadius())
-			return false;
-		if(point.y < getPosition().y - getRadius() || point.y > getPosition().y + getRadius())
-			return false;
-		
-		return getPosition().distance(point) < getRadius();
-		*/
+	}
+	
+	public boolean equals(Object other)
+	{
+	    if (other == null) 
+	    	return false;
+	    if (other == this) 
+	    	return true;
+	    if (!(other instanceof Circle))
+	    	return false;
+	    Circle otherCircle = (Circle)other;
+		return position_.equals(otherCircle.getPosition()) &&
+			   radius_ == otherCircle.getRadius();
 	}
 	
 	private Vector2D position_;
-	private int radius_;
+	private double radius_;
 }

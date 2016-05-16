@@ -37,7 +37,7 @@ public class PlayController implements Controller
 	
 	public void reload()
 	{
-		if(target_.getAmmoManager().getCount() == AmmoManager.MAX_COUNT ||
+		if(target_.getAmmoManager().hasMaxCount() ||
 		   target_.getAmmoManager().isReloading())
 			return;
 		target_.getAmmoManager().startReloading();
@@ -48,7 +48,7 @@ public class PlayController implements Controller
 				public void run() 
 				{
 					target_.getAmmoManager().stopReloading();
-					target_.getAmmoManager().setCount(AmmoManager.MAX_COUNT);
+					target_.getAmmoManager().resetCount();
 		        }
 		    }, 
 			RELOAD_MILI

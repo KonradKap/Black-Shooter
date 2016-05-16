@@ -7,30 +7,21 @@ import utill.Vector2D;
 
 public class Entity
 {
-	Entity()
+	public Entity()
 	{
-		this(new Circle(), new Vector2D(), Allegiance.WHITE/*, new NullAction()*/);
-		//body_ = new Circle();
-		//velocity_ = new Vector2D(0, 0);
-		//allegiance_ = Allegiance.WHITE;
-		
+		this(new Circle(), new Vector2D(), Allegiance.WHITE);		
 	}
 	
-	Entity(Circle body, Vector2D velocity, Allegiance allegiance/*, EntityAction action*/)
+	public Entity(Circle body, Vector2D velocity, Allegiance allegiance)
 	{
 		body_ = new Circle(body);
 		velocity_ = new Vector2D(velocity);
 		allegiance_ = allegiance;
-		//action_ = action;
 	}
 	
-	Entity(Vector2D position, int size, Vector2D velocity, Allegiance allegiance/*, EntityAction action*/)
+	public Entity(Vector2D position, int size, Vector2D velocity, Allegiance allegiance)
 	{
-		this(new Circle(position, size), velocity, allegiance/*, action*/);
-		//body_ = new Circle(position, size);		
-		//velocity_ = new Vector2D(velocity.x, velocity.y);
-		//allegiance_ = allegiance;
-		//action_ = action;
+		this(new Circle(position, size), velocity, allegiance);
 	}
 	
 	public Circle getBody()
@@ -63,11 +54,6 @@ public class Entity
 	{
 		allegiance_ = allegiance;
 	}
-	
-	//public void invokeAction()
-	//{
-	//	action_.doAction(this);
-	//}
 	
 	public void makeStep(double stepLength)
 	{

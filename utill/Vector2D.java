@@ -7,6 +7,8 @@ public class Vector2D
 	public double x;
 	public double y;
 	
+	public static final double EPSILON = 1e-15;
+	
 	public Vector2D()
 	{
 		x = 0;
@@ -31,6 +33,11 @@ public class Vector2D
 		y = other.y;
 	}
 	
+	public static Vector2D add(Vector2D lhs, Vector2D rhs)
+	{
+		return lhs.add(rhs);
+	}
+	
 	public Vector2D add(Vector2D other)
 	{
 		return new Vector2D(x+other.x, y+other.y);
@@ -39,6 +46,11 @@ public class Vector2D
 	public Vector2D subtract(Vector2D other)
 	{
 		return new Vector2D(x-other.x, y-other.y);
+	}
+	
+	public static Vector2D subtract(Vector2D lhs, Vector2D rhs)
+	{
+		return lhs.subtract(rhs);
 	}
 	
 	public Vector2D multiply(double scalar)
@@ -56,9 +68,19 @@ public class Vector2D
 		return new Vector2D(-x, -y);
 	}
 	
+	public static double distance(Vector2D begin, Vector2D end)
+	{
+		return begin.distance(end);
+	}
+	
 	public double distance(Vector2D end)
 	{
 		return Math.sqrt(distanceSq(end));
+	}
+	
+	public static double distanceSq(Vector2D begin, Vector2D end)
+	{
+		return begin.distanceSq(end);
 	}
 	
 	public double distanceSq(Vector2D end)
@@ -66,6 +88,11 @@ public class Vector2D
 		double xParam = end.x - x;
 		double yParam = end.y - y;
 		return xParam*xParam + yParam*yParam;
+	}
+	
+	public static double dotProduct(Vector2D lhs, Vector2D rhs)
+	{
+		return lhs.dotProduct(rhs);
 	}
 	
 	public double dotProduct(Vector2D other)
@@ -82,6 +109,7 @@ public class Vector2D
 	    if (!(other instanceof Vector2D))
 	    	return false;
 	    Vector2D otherVector = (Vector2D)other;
-		return x == otherVector.x && y == otherVector.y;
+		return Math.abs(x - otherVector.x) < EPSILON && 
+			   Math.abs(y - otherVector.y) < EPSILON;
 	}
 }
