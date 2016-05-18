@@ -67,37 +67,35 @@ public class Game implements ActionListener, Observer
 	public static void main(String[] args) throws Exception
 	{
 		Game game = new Game();
-		final int FPS = 60;
-		
-		final int NANO = 1000000000;
 		
 		long initialTime = System.nanoTime();
-		final double timeF = (double)NANO / FPS;
-		double deltaF = 0;
+		double framesOmitted = 0;
 		
 		game.getModel().start();
 	    while (game.running_) 
 	    {
 	        long currentTime = System.nanoTime();
-	        deltaF += (currentTime - initialTime) / timeF;
+	        framesOmitted += (currentTime - initialTime) / frameTimeNano;
 	        initialTime = currentTime;
 
-	        while (deltaF >= 1) 
+	        while (framesOmitted >= 1) 
 	        {
-	            game.getModel().update(1.0/FPS);
-	            deltaF--;
-	            game.getView().draw();
+	            game.getModel().update(frameTimeSec);
+	            framesOmitted--;
+	            game.getView().render();
 		        Toolkit.getDefaultToolkit().sync();
 	        }
      
 	        try
 	        {
-	            long gameTime = (System.nanoTime() - initialTime + (long)timeF) / 1000000;
-	            Thread.sleep(gameTime);
+	        	long frameTimeRemaining = (long)(frameTimeNano - (System.nanoTime() - initialTime)) / 1000000;
+	        	if(frameTimeRemaining > 0)
+	        		Thread.sleep(frameTimeRemaining);
 	        }
 	        catch(InterruptedException e)
 	        {
 	        }
+	 
 	    }
 	    View.getFrame().dispatchEvent(new WindowEvent(View.getFrame(), WindowEvent.WINDOW_CLOSING));
 	}
@@ -108,7 +106,6 @@ public class Game implements ActionListener, Observer
 		{
 		case Menu:	
 			MenuModel newMenuModel = new MenuModel();		
-			//MenuController newMenuController = new MenuController(newMenuModel);
 			MenuView newMenuView = new MenuView(newMenuModel);
 			
 			newMenuView.getPlayButton().addActionListener(this);
@@ -150,6 +147,12 @@ public class Game implements ActionListener, Observer
 		return view_;
 	}
 	
+	static final int NANO = 1000000000;
+	
+	static final int FPS  = 60;
+	static final double frameTimeSec = 1./FPS; 
+	static final double frameTimeNano = frameTimeSec * NANO;
+
 	
 	private Integer maxPoints_ = 0;
 	private boolean running_ = true;

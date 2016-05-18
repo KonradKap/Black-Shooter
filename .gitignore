@@ -2,6 +2,8 @@
 *.swp
 *.txt
 *.jar
+*.xml
+*.zip
 
 META-INF/
 bin/
@@ -10,3 +12,4 @@ doc/
 .project
 .classpath
 .settings/
+.externalToolBuilders/

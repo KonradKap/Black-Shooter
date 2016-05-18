@@ -14,7 +14,19 @@ abstract public class View
 		//strategy_ = canvas_.getBufferStrategy();
 	}
 	
-	abstract public void draw();
+	public void render()
+	{
+		new Thread(new Runnable() 
+			{
+				public void run() 
+				{
+					draw();
+				}
+			})
+		.run();
+	}
+	
+	abstract protected void draw();
 	
 	public static MyFrame getFrame()
 	{

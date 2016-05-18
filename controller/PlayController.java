@@ -3,7 +3,6 @@ package controller;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import model.AmmoManager;
 import model.PlayModel;
 import model.entity.Entity;
 import utill.Vector2D;

@@ -36,6 +36,8 @@ public class MenuView extends View
 	public void draw()
 	{	
 		mainFrame_.paintAll(mainFrame_.getGraphics());
+		
+		//mainFrame_.paint(mainFrame_.getGraphics());
 		mainFrame_.repaint();
 	}
 	

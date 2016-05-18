@@ -1,7 +1,5 @@
 package view;
 
-import java.awt.Color;
-
 import javax.swing.*;
 
 import model.Model;
@@ -19,7 +17,7 @@ public class MyFrame extends JFrame
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 		setResizable(false);
-		setBackground(Color.BLUE);
+		//setBackground(Color.BLUE);
 	}
 	
 	public static Vector2D windowBegin()
@@ -29,7 +27,7 @@ public class MyFrame extends JFrame
 	
 	public static Vector2D windowSize()
 	{
-		return new Vector2D(800, 600);
+		return new Vector2D(WIDTH, HEIGHT);
 	}
 	
 	
