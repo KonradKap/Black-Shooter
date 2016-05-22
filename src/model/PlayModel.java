@@ -63,7 +63,7 @@ public class PlayModel extends Observable implements Model
 	    {
 	       time_.incrementAndGet();
 
-	       if(time_.equals(new AtomicInteger(GAME_TIME)))
+	       if(time_.get() == GAME_TIME)
 	       {
 	    	   setChanged();
 	    	   notifyObservers(new Integer(getPointCount()));
